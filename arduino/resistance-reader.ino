@@ -14,11 +14,13 @@ void loop() {
   double voltageOne = (sensorOne * 5) / 1023;
 
   double resistance = (100000 * voltageZero) / (voltageOne - voltageZero);
+
+  double temperature = -48.5 * log(resistance) + 635.07;
   
   // print out voltage
   //Serial.println(voltageZero);
   //Serial.println(voltageOne);
   Serial.println(resistance);
-  
+  //Serial.println(temperature);
   delay(1000); // delay in between reads for stability
 }

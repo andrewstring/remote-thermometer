@@ -24,25 +24,33 @@ class Converter():
 
         # if resistance is out of range
         if input_resistance < min(self.data_dict.keys()) or input_resistance > max(self.data_dict.keys()):
+            print('out of calibration range')
             return None
 
         # if resistance already in calibration file
         elif input_resistance in self.data_dict.keys():
-            return self.data_dict[input_resistance]
+            return input_resistance
 
         sorted_keys = sorted(self.data_dict.keys())
-        print(sorted_keys)
         for index in range(len(sorted_keys)):
             if input_resistance < sorted_keys[index]:
                 break
-        return [self.data_dict[sorted_keys[index]], self.data_dict[sorted_keys[index - 1]]]
+        return (sorted_keys[index], sorted_keys[index - 1])
 
     def get_temp(self, input_resistance):
-        keys = self.between(input_resistance)
-        print(self.data_dict)
-        print(keys)
-        return ((input - self.data_dict[keys[0]]) / (self.data_dict[keys[1]] - self.data_dict[keys[0]]) \
-            * (keys[1] - keys[0])) + keys[0]
+        bounded_by = self.between(input_resistance)
+        if bounded_by is None:
+            return
+        elif isinstance(bounded_by, int):
+            return self.data_dict[bounded_by]
+        resistance_one = bounded_by[0]
+        resistance_two = bounded_by[1]
+        temp_one = self.data_dict[resistance_one]
+        temp_two = self.data_dict[resistance_two]
+        return ((input_resistance - resistance_one) / (resistance_two - resistance_one) * (temp_two - temp_one)) + temp_one
 
-converter = Converter('calibration.txt')
-print(converter.get_temp(120000))
+
+if __name__ == '__main__':
+
+    converter = Converter('calibration.txt')
+    print(converter.get_temp(170000.1))

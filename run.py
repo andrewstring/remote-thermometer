@@ -1,8 +1,17 @@
-from reader import Reader
-from sender import Sender
+import time
 
-reader = Reader()
-sender = Sender()
+from arduino.arduino_reader import ArduinoReader
+from arduino.convert import Converter
 
-reader.start_reader('log.txt')
-sender.start_sender(reader)
+port = input('Enter arduino port: ')
+print('\n')
+arduino_connection =  ArduinoReader('/dev/ttyACM0')
+
+convert = Converter('arduino/calibration.txt')
+
+while True:
+    resistance_reading = arduino_connection.read()
+    print(resistance_reading)
+    print('Temp:', convert.get_temp(resistance_reading))
+    print('\n')
+    time.sleep(1)
