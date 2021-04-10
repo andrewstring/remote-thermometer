@@ -46,6 +46,13 @@ function deleteUser(id) {
         .catch(err => console.error(err))
 }
 
+function updateUser(id, temp) {
+    pool
+        .query(`UPDATE users SET temp = ${temp} WHERE id = ${id}`)
+        .then(res => console.log(`user with ${id} temp update to: ${temp}`))
+        .catch(err => console.error(err))
+}
+
 
 function getUser(id) {
     pool
@@ -54,4 +61,4 @@ function getUser(id) {
         .catch(err => console.error(err))
 }
 
-getUser(50)
+updateUser(40, 205)

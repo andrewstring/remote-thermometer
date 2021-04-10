@@ -8,12 +8,6 @@ const data_router = require('./routes/data')
 // config vars
 port = 3000
 
-app.use(bodyParser.json())
-app.use(
-    bodyParser.urlencoded({
-        extended: true,
-    })
-)
 app.use('/data', data_router)
 
 
