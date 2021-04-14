@@ -2,13 +2,21 @@ const express = require('express')
 const bodyParser = require('body-parser')
 const app = express()
 
+//middleware
+app.use(
+    express.urlencoded({
+        extended: true
+    })
+)
+app.use(express.json())
+
 // routers
-const data_router = require('./routes/data')
+const user_router = require('./routes/user')
 
 // config vars
 port = 3000
 
-app.use('/data', data_router)
+app.use('/user', user_router)
 
 
 

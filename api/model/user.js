@@ -8,17 +8,11 @@ const createUserTable = '\
     temp INT,\
     date_time TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP\
   );'
-
 const dropUserTable = `DROP TABLE IF EXISTS thermo;`
-
 const createUser = `INSERT INTO thermo(user_id) VALUES (%user_id%);`
-
 const readUser = `SELECT * FROM thermo WHERE user_id = %user_id%;`
-
 const readAllUsers = `SELECT * FROM thermo;`
-
 const updateUser = `UPDATE thermo SET temp = %temp% WHERE user_id = %user_id%;`
-
 const deleteUser = `DELETE FROM thermo WHERE user_id = %user_id%;`
 
 // pools will use environment variables
@@ -33,45 +27,55 @@ const pool = new Pool({
 })
 
 
-function runQuery(pool, query) {
+const runQuery = (pool, query) => {
   pool.query(query, (err, res) => {
     console.log(err, res)
-    pool.end()
   })
 }
 
-function runCreateUserTable(pool) {
+const runCreateUserTable = (pool) => {
   runQuery(pool, createUserTable)
 }
 
-function runDropUserTable(pool) {
+const runDropUserTable = (pool) => {
   runQuery(pool, dropUserTable)
 }
 
-function runCreateUser(pool, user_id) {
+const runCreateUser = (pool, user_id) => {
   runQuery(pool, createUser.replace('%user_id%', user_id))
 }
 
-function runReadUser(pool, user_id) {
+const runReadUser = (pool, user_id) => {
+  console.log(readUser.replace('%user_id%', user_id))
   runQuery(pool, readUser.replace('%user_id%', user_id))
 }
 
-function runReadAllUsers(pool) {
+const runReadAllUsers = (pool) => {
   runQuery(pool, getAllUsers)
 }
 
-function runUpdateUser(pool, user_id, temp) {
+const runUpdateUser = (pool, user_id, temp) => {
   runQuery(pool, updateUser
     .replace('%user_id%', user_id)
     .replace('%temp%', temp))
 }
 
-function runDeleteUser(pool, user_id) {
+const runDeleteUser = (pool, user_id) => {
   runQuery(pool, deleteUser.replace('%user_id%', user_id))
 }
 
-function runAllUser(pool) {
+const runAllUser = (pool) => {
   runQuery(pool, getAllUsers)
 }
 
-runCreateUserTable(pool)
+//exports
+module.exports = {
+  pool: pool,
+  runCreateUserTable: runCreateUserTable,
+  runDropUserTable: runDropUserTable,
+  runCreateUser: runCreateUser,
+  runReadUser: runReadUser,
+  runReadAllUsers: runReadAllUsers,
+  runUpdateUser: runUpdateUser,
+  runDeleteUser: runDeleteUser
+}
